@@ -1,4 +1,6 @@
-/* 1. Базовые настройки */
+/* ==========================================================================
+   1. БАЗОВЫЕ НАСТРОЙКИ
+   ========================================================================== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -17,7 +19,9 @@ body {
     padding: 20px;
 }
 
-/* 2. Главный контейнер */
+/* ==========================================================================
+   2. ГЛАВНЫЙ КОНТЕЙНЕР И ЗАГОЛОВОК
+   ========================================================================== */
 .dashboard {
     background: #09090b;
     border: 1px solid #1a1a1a;
@@ -27,14 +31,10 @@ body {
     max-width: 800px;
     width: 100%;
     display: grid;
-    /* Включаем Grid для удобной сетки */
     grid-template-columns: 1fr 1fr;
-    /* Две колонки одинакового размера */
     gap: 20px;
-    /* Расстояние между карточками */
 }
 
-/* 3. Заголовок */
 .main-title {
     font-family: 'Cinzel', serif;
     color: #e0e0e0;
@@ -44,21 +44,18 @@ body {
     margin-bottom: 20px;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
     transition: all 0.5s ease;
-    /* 👈 Плавный переход */
     cursor: default;
-    /* Курсор не меняется на "руку", так как это не ссылка */
 }
 
 .main-title:hover {
     color: #8b0000;
-    /* 👈 Кроваво-красный цвет */
     text-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
-    /* 👈 Свечение */
     transform: scale(1.02);
-    /* 👈 Легкое увеличение */
 }
 
-/* 4. Карточки (Погода и Валюты) */
+/* ==========================================================================
+   3. КАРТОЧКИ И СТИЛИ ДАННЫХ
+   ========================================================================== */
 .card {
     background: #030303;
     border: 1px solid #222;
@@ -69,7 +66,6 @@ body {
 
 .card:hover {
     border-color: #8b0000;
-    /* Кровавый акцент при наведении */
 }
 
 .card h2 {
@@ -82,7 +78,6 @@ body {
     padding-bottom: 10px;
 }
 
-/* 5. Стили для данных */
 .weather-info {
     display: flex;
     justify-content: space-between;
@@ -93,11 +88,6 @@ body {
     font-size: 36px;
     color: #e0e0e0;
     font-weight: 600;
-}
-
-.city {
-    color: #666;
-    font-size: 14px;
 }
 
 .currency-row {
@@ -112,21 +102,6 @@ body {
     font-weight: 600;
 }
 
-/* 6. Адаптивность для телефонов */
-@media (max-width: 600px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-        /* На телефоне всё в одну колонку */
-    }
-
-    .main-title {
-        grid-column: span 1;
-    }
-}
-
-/* --- Стили для новых блоков --- */
-
-/* Строки времени */
 .time-row {
     display: flex;
     justify-content: space-between;
@@ -135,70 +110,9 @@ body {
     font-size: 14px;
 }
 
-/* Блок статуса системы (растягиваем на 2 колонки) */
-.system-monitor {
-    grid-column: span 2;
-    /* Вот эта магия растягивает блок на всю ширину */
-}
-
-.sys-info {
-    display: flex;
-    justify-content: space-between;
-    /* Разносим три элемента по краям */
-    align-items: center;
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 10px 0;
-    color: #666;
-}
-
-.sys-val {
-    color: #e0e0e0;
-    font-weight: 600;
-    font-family: 'Share Tech Mono', monospace;
-    /* Можно добавить моноширинный шрифт для хакерского вида, если он есть, или оставить стандартный */
-}
-
-/* Адаптивность для телефона: блок статуса тоже в одну колонку */
-@media (max-width: 600px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-        /* На телефоне всё в одну колонку */
-    }
-
-    .main-title {
-        grid-column: span 1;
-    }
-
-    /* 👇 УПРАВЛЯЕМ ПОРЯДКОМ БЛОКОВ НА ТЕЛЕФОНЕ */
-    .weather-card {
-        order: 1;
-    }
-
-    .time-card {
-        order: 2;
-    }
-
-    .currency-card {
-        order: 3;
-    }
-
-    .crypto-card {
-        order: 4;
-    }
-
-    .system-monitor {
-        order: 5;
-        grid-column: span 1;
-    }
-
-    .sys-info {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-/* Стили для поля ввода города */
+/* ==========================================================================
+   4. СПЕЦИАЛЬНЫЕ ЭЛЕМЕНТЫ (Погода, Валюты, Статус)
+   ========================================================================== */
 .city-input {
     background: transparent;
     border: 1px solid #333;
@@ -213,7 +127,6 @@ body {
     transition: border-color 0.3s ease;
 }
 
-/* Когда пользователь кликает на поле (фокус), рамка становится кроваво-красной */
 .city-input:focus {
     border-color: #8b0000;
 }
@@ -222,14 +135,20 @@ body {
     color: #666;
     font-size: 12px;
     text-transform: uppercase;
-    /* Делаем все буквы заглавными */
     letter-spacing: 1px;
     border: 1px solid #333;
     padding: 4px 8px;
     border-radius: 2px;
 }
 
-/* Стили для выпадающего списка в заголовке */
+.weather-icon {
+    font-family: 'Segoe UI Symbol', sans-serif;
+    font-size: 28px;
+    color: #a3a3a3;
+    margin: 0 10px;
+    opacity: 0.8;
+}
+
 .header-select {
     background: transparent;
     border: 1px solid #333;
@@ -249,15 +168,56 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* Стили для изменения курса */
 .currency-up {
     color: #00ff00 !important;
-    /* Ярко-зеленый для роста */
     text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
 
 .currency-down {
     color: #ff0000 !important;
-    /* Красный для падения */
     text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.system-monitor {
+    grid-column: span 2;
+}
+
+.sys-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    color: #666;
+}
+
+.sys-val {
+    color: #e0e0e0;
+    font-weight: 600;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* ==========================================================================
+   5. АДАПТИВНОСТЬ (Мобильные устройства)
+   ========================================================================== */
+@media (max-width: 600px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .main-title {
+        grid-column: span 1;
+    }
+    
+    .weather-card { order: 1; }
+    .time-card { order: 2; }
+    .currency-card { order: 3; }
+    .crypto-card { order: 4; }
+    .system-monitor { order: 5; grid-column: span 1; }
+    
+    .sys-info {
+        flex-direction: column;
+        gap: 10px;
+    }
 }

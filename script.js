@@ -1,90 +1,39 @@
-// ==========================================
-// 0. СЛОВАРЬ ПОГОДЫ
-// ==========================================
+// ==========================================================================
+// 0. СЛОВАРИ И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+// ==========================================================================
 const weatherDictionary = {
-    'Sunny': 'Солнечно',
-    'Clear': 'Ясно',
-    'Partly cloudy': 'Переменная облачность',
-    'Cloudy': 'Облачно',
-    'Overcast': 'Пасмурно',
-    'Mist': 'Туман',
-    'Patchy rain possible': 'Возможен дождь',
-    'Light drizzle': 'Морось',
-    'Light rain': 'Легкий дождь',
-    'Moderate rain': 'Умеренный дождь',
-    'Heavy rain': 'Сильный дождь',
-    'Light snow': 'Легкий снег',
-    'Moderate snow': 'Умеренный снег',
-    'Heavy snow': 'Сильный снег',
-    'Blizzard': 'Метель',
-    'Fog': 'Туман',
-    'Thundery outbreaks possible': 'Возможна гроза'
+    'Sunny': 'Солнечно', 'Clear': 'Ясно', 'Partly cloudy': 'Переменная облачность',
+    'Cloudy': 'Облачно', 'Overcast': 'Пасмурно', 'Mist': 'Туман',
+    'Patchy rain possible': 'Возможен дождь', 'Light drizzle': 'Морось',
+    'Light rain': 'Легкий дождь', 'Moderate rain': 'Умеренный дождь',
+    'Heavy rain': 'Сильный дождь', 'Light snow': 'Легкий снег',
+    'Moderate snow': 'Умеренный снег', 'Heavy snow': 'Сильный снег',
+    'Blizzard': 'Метель', 'Fog': 'Туман', 'Thundery outbreaks possible': 'Возможна гроза'
 };
-let currentUsdRate = 0; // Глобальная переменная для хранения курса доллара
-function updateClocks() {
-    // Получаем текущее время в разных часовых поясах
-    const now = new Date();
 
-    // toLocaleTimeString берет время и форматирует его под нужный город
+const weatherIcons = {
+    'Sunny': '☀', 'Clear': '☾', 'Partly cloudy': '⛅', 'Cloudy': '☁', 'Overcast': '☁',
+    'Mist': '≡', 'Fog': '≡', 'Light drizzle': '☂', 'Light rain': '☂', 
+    'Moderate rain': '☔', 'Heavy rain': '☔', 'Light snow': '❄', 
+    'Moderate snow': '❄', 'Heavy snow': '❄', 'Blizzard': '❆'
+};
+
+const startTime = Date.now(); 
+let currentUsdRate = 0; 
+
+// ==========================================================================
+// 1. МИРОВОЕ ВРЕМЯ
+// ==========================================================================
+function updateClocks() {
+    const now = new Date();
     document.getElementById('time-msk').textContent = now.toLocaleTimeString('ru-RU', { timeZone: 'Europe/Moscow' });
     document.getElementById('time-lon').textContent = now.toLocaleTimeString('en-GB', { timeZone: 'Europe/London' });
     document.getElementById('time-tok').textContent = now.toLocaleTimeString('ja-JP', { timeZone: 'Asia/Tokyo' });
 }
 
-// Запускаем функцию каждую секунду (1000 миллисекунд)
-setInterval(updateClocks, 1000);
-updateClocks(); // И вызываем один раз сразу, чтобы не ждать секунду
-
-// ==========================================
-// 2. КРИПТОВАЛЮТЫ (API CoinLore, без прокси)
-// ==========================================
-async function updateCryptoDisplay() {
-    const coinId = document.getElementById('crypto-select').value;
-    const coinName = document.getElementById('crypto-select').options[document.getElementById('crypto-select').selectedIndex].text;
-
-    // Меняем заголовки и ставим статус загрузки
-    document.getElementById('crypto-name').textContent = `${coinName} / USD`;
-    document.getElementById('crypto-name-rub').textContent = `${coinName} / RUB`;
-    document.getElementById('crypto-price').textContent = 'Загрузка...';
-    document.getElementById('crypto-price-rub').textContent = 'Загрузка...';
-
-    const coinLoreIds = {
-        'bitcoin': '90',
-        'ethereum': '80',
-        'dogecoin': '2',
-        'solana': '48543'
-    };
-    const loreId = coinLoreIds[coinId];
-
-    try {
-        const response = await fetch(`https://api.coinlore.net/api/ticker/?id=${loreId}`);
-        const data = await response.json();
-        const priceUsd = parseFloat(data[0].price_usd);
-
-        // Выводим цену в долларах
-        document.getElementById('crypto-price').textContent = `$${priceUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-        // 👇 КОНВЕРТАЦИЯ В РУБЛИ
-        if (currentUsdRate > 0) {
-            const priceRub = priceUsd * currentUsdRate;
-            document.getElementById('crypto-price-rub').textContent = `${priceRub.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₽`;
-        } else {
-            document.getElementById('crypto-price-rub').textContent = 'Курс не загружен';
-        }
-
-    } catch (error) {
-        console.error("Ошибка крипты:", error);
-        document.getElementById('crypto-price').textContent = "Offline";
-        document.getElementById('crypto-price-rub').textContent = "Offline";
-    }
-}
-
-updateCryptoDisplay();
-setInterval(updateCryptoDisplay, 60000); // Обновляем раз в минуту
-
-// ==========================================
-// 4. ПОГОДА (API wttr.in)
-// ==========================================
+// ==========================================================================
+// 2. ПОГОДА
+// ==========================================================================
 async function fetchWeather(city = 'Moscow') {
     try {
         const response = await fetch(`https://wttr.in/${city}?format=j1`);
@@ -93,124 +42,160 @@ async function fetchWeather(city = 'Moscow') {
         const temp = data.current_condition[0].temp_C;
         const englishDesc = data.current_condition[0].weatherDesc[0].value;
 
-        // Ищем ключ в словаре, игнорируя регистр (большие/маленькие буквы)
+        // Перевод
         const dictKey = Object.keys(weatherDictionary).find(key => key.toLowerCase() === englishDesc.trim().toLowerCase());
         const russianDesc = dictKey ? weatherDictionary[dictKey] : englishDesc;
+        
+        // Иконка
+        const iconKey = Object.keys(weatherIcons).find(key => key.toLowerCase() === englishDesc.trim().toLowerCase());
+        const icon = iconKey ? weatherIcons[iconKey] : '•';
 
-        // Форматируем температуру
-        const tempDisplay = temp > 0 ? `+${temp}` : temp;
-
-        // Выводим данные на экран
-        document.getElementById('weather-temp').textContent = `${tempDisplay}°C`;
+        document.getElementById('weather-temp').textContent = `${temp > 0 ? '+' + temp : temp}°C`;
         document.getElementById('weather-desc').textContent = russianDesc;
-
-        // Обновляем название города в заголовке карточки
+        document.getElementById('weather-icon').textContent = icon;
         document.getElementById('current-city-display').textContent = city.toUpperCase();
-
     } catch (error) {
-        console.error("Ошибка загрузки погоды:", error);
+        console.error("Ошибка погоды:", error);
         document.getElementById('weather-temp').textContent = "Offline";
-        document.getElementById('weather-desc').textContent = "Ошибка";
     }
 }
 
-// Запускаем погоду при загрузке страницы (по умолчанию Москва)
-fetchWeather();
-setInterval(fetchWeather, 1800000); // Обновляем раз в 30 минут
-
-// 👇 СЛУШАТЕЛЬ СОБЫТИЙ ДЛЯ СМЕНЫ ГОРОДА
-const cityInput = document.getElementById('city-input');
-
-cityInput.addEventListener('keypress', function (event) {
-    // Если нажата клавиша Enter
-    if (event.key === 'Enter') {
-        // Берем текст из поля ввода и передаем его в функцию
-        fetchWeather(cityInput.value);
-        // Убираем фокус с поля (чтобы курсор исчез)
-        cityInput.blur();
-    }
-});
-
-fetchWeather();
-setInterval(fetchWeather, 1800000); // Обновляем раз в 30 минут
-
-// ==========================================
-// 5. ВАЛЮТЫ (API ЦБ РФ с динамикой за день)
-// ==========================================
+// ==========================================================================
+// 3. ВАЛЮТЫ (С динамикой и сохранением курса доллара)
+// ==========================================================================
 async function fetchCurrency() {
     const currencyCode = document.getElementById('currency-select').value;
-
+    
     document.getElementById('currency-name').textContent = `${currencyCode} / RUB`;
     document.getElementById('currency-rate').textContent = 'Загрузка...';
-    document.getElementById('currency-change').textContent = '...';
 
     try {
         const response = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
         const data = await response.json();
 
-        const currencyData = data.Valute[currencyCode];
-        const currentRate = currencyData.Value;
-        const previousRate = currencyData.Previous; // Курс на вчера
+        const currentRate = data.Valute[currencyCode].Value;
+        const previousRate = data.Valute[currencyCode].Previous;
+        
+        // Сохраняем доллар для крипты
+        currentUsdRate = data.Valute['USD'].Value; 
 
-        // Сохраняем текущий курс доллара для пересчета крипты
-        currentUsdRate = data.Valute['USD'].Value;
-
-        // 👇 ВЫЧИСЛЯЕМ ИЗМЕНЕНИЕ
         const diff = currentRate - previousRate;
         const percentDiff = (diff / previousRate) * 100;
+        const sign = diff >= 0 ? '+' : '';
 
-        // Форматируем строку: абсолютная разница, процент
-        const sign = diff >= 0 ? '+' : ''; // Плюс для положительных чисел
-        const changeText = `${sign}${diff.toFixed(2)} (${sign}${percentDiff.toFixed(2)}%)`;
-
-        // Выводим на экран
         document.getElementById('currency-rate').textContent = currentRate.toFixed(2);
-
+        
         const changeElement = document.getElementById('currency-change');
-        changeElement.textContent = changeText;
+        changeElement.textContent = `${sign}${diff.toFixed(2)} (${sign}${percentDiff.toFixed(2)}%)`;
+        
+        if (diff > 0) changeElement.className = 'rate currency-up';
+        else if (diff < 0) changeElement.className = 'rate currency-down';
+        else changeElement.className = 'rate';
 
-        // 👇 МЕНЯЕМ ЦВЕТ В ЗАВИСИМОСТИ ОТ НАПРАВЛЕНИЯ
-        if (diff > 0) {
-            changeElement.className = 'rate currency-up';
-        } else if (diff < 0) {
-            changeElement.className = 'rate currency-down';
-        } else {
-            changeElement.className = 'rate'; // Если 0, оставляем серым
-        }
-
-        // Пересчитываем крипту в рублях
-        updateCryptoDisplay();
-
+        updateCryptoDisplay(); // Обновляем рубли в крипте
     } catch (error) {
-        console.error("Ошибка загрузки валют:", error);
-        document.getElementById('currency-rate').textContent = "Ошибка";
-        document.getElementById('currency-change').textContent = "--";
+        console.error("Ошибка валют:", error);
     }
 }
 
-fetchCurrency(); // Запускаем при загрузке страницы
-// Обновляем раз в час (3600000 мс). Больше не нужно, курсы ЦБ меняются раз в день.
-setInterval(fetchCurrency, 3600000);
+// ==========================================================================
+// 4. КРИПТОВАЛЮТЫ (CoinLore)
+// ==========================================================================
+async function updateCryptoDisplay() {
+    const coinId = document.getElementById('crypto-select').value;
+    const coinName = document.getElementById('crypto-select').options[document.getElementById('crypto-select').selectedIndex].text;
 
-// ==========================================
-// 6. СТАТУС СИСТЕМЫ (Имитация активности)
-// ==========================================
+    document.getElementById('crypto-name').textContent = `${coinName} / USD`;
+    document.getElementById('crypto-name-rub').textContent = `${coinName} / RUB`;
+
+    const coinLoreIds = { 'bitcoin': '90', 'ethereum': '80', 'dogecoin': '2', 'solana': '48543' };
+
+    try {
+        const response = await fetch(`https://api.coinlore.net/api/ticker/?id=${coinLoreIds[coinId]}`);
+        const data = await response.json();
+        const priceUsd = parseFloat(data[0].price_usd);
+
+        document.getElementById('crypto-price').textContent = `$${priceUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+        if (currentUsdRate > 0) {
+            const priceRub = priceUsd * currentUsdRate;
+            document.getElementById('crypto-price-rub').textContent = `${priceRub.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₽`;
+        }
+    } catch (error) {
+        document.getElementById('crypto-price').textContent = "Offline";
+    }
+}
+
+// ==========================================================================
+// 5. СТАТУС СИСТЕМЫ
+// ==========================================================================
 function updateSystem() {
-    // Генерируем случайный пинг от 12 до 45
+    // Пинг
     const randomPing = Math.floor(Math.random() * 34) + 12;
     document.getElementById('sys-ping').textContent = `${randomPing} ms`;
+    document.getElementById('sys-threat').textContent = randomPing > 40 ? "HIGH" : "LOW";
+    document.getElementById('sys-threat').style.color = randomPing > 40 ? "#ff0000" : "#8b0000";
 
-    // Меняем цвет уровня угрозы в зависимости от пинга
-    const threatElement = document.getElementById('sys-threat');
-    if (randomPing > 40) {
-        threatElement.textContent = "HIGH";
-        threatElement.style.color = "#ff0000"; // Красный при высоком пинге
+    // Uptime
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('sys-uptime').textContent = 
+        `${Math.floor(elapsed / 3600).toString().padStart(2, '0')}:` +
+        `${Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0')}:` +
+        `${(elapsed % 60).toString().padStart(2, '0')}`;
+
+    // Память
+    if (performance.memory) {
+        document.getElementById('sys-mem').textContent = `${(performance.memory.usedJSHeapSize / 1048576).toFixed(1)} MB`;
     } else {
-        threatElement.textContent = "LOW";
-        threatElement.style.color = "#8b0000"; // Кровавый при низком
+        document.getElementById('sys-mem').textContent = `N/A`;
     }
 }
 
-// Запускаем сразу и обновляем каждые 2 секунды
-updateSystem();
-setInterval(updateSystem, 2000);
+// ==========================================================================
+// 6. СОХРАНЕНИЕ НАСТРОЕК И ЗАПУСК
+// ==========================================================================
+function changeCurrency(val) {
+    localStorage.setItem('dash_currency', val);
+    fetchCurrency();
+}
+
+function changeCrypto(val) {
+    localStorage.setItem('dash_crypto', val);
+    updateCryptoDisplay();
+}
+
+// Главный запуск при загрузке страницы
+window.onload = function() {
+    // 1. Проверяем, что сохранил пользователь
+    const savedCity = localStorage.getItem('dash_city') || 'Moscow';
+    const savedCurrency = localStorage.getItem('dash_currency') || 'USD';
+    const savedCrypto = localStorage.getItem('dash_crypto') || 'bitcoin';
+
+    // 2. Восстанавливаем интерфейс
+    document.getElementById('city-input').value = savedCity;
+    document.getElementById('currency-select').value = savedCurrency;
+    document.getElementById('crypto-select').value = savedCrypto;
+
+    // 3. Делаем первые запросы
+    fetchWeather(savedCity);
+    fetchCurrency(); // Внутри вызовется updateCryptoDisplay
+    updateClocks();
+    updateSystem();
+
+    // 4. Запускаем таймеры
+    setInterval(updateClocks, 1000);       // Часы
+    setInterval(updateSystem, 2000);       // Статус
+    setInterval(updateCryptoDisplay, 60000); // Крипта (раз в минуту)
+    setInterval(fetchWeather, 1800000);    // Погода (раз в 30 минут)
+    setInterval(fetchCurrency, 3600000);   // Валюты (раз в час)
+};
+
+// Слушатель для смены города
+document.getElementById('city-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        const city = this.value;
+        localStorage.setItem('dash_city', city);
+        fetchWeather(city);
+        this.blur(); 
+    }
+});

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +7,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
     <div class="dashboard">
@@ -22,15 +17,10 @@
 
         <!-- Блок 1: Погода -->
         <div class="card weather-card">
-            <!-- Добавили span для отображения текущего города рядом с заголовком -->
-            <h2>ПОГОДА <span id="current-city-display"
-                    style="font-size: 10px; color: #555; margin-left: 10px;">MOSCOW</span></h2>
-
-            <!-- Добавили атрибут list="city-list", который связывает поле с подсказками -->
-            <input type="text" id="city-input" class="city-input" list="city-list" placeholder="Введите город..."
-                value="Moscow">
-
-            <!-- Сам список подсказок (datalist) -->
+            <h2>ПОГОДА <span id="current-city-display" style="font-size: 10px; color: #555; margin-left: 10px;">MOSCOW</span></h2>
+            
+            <input type="text" id="city-input" class="city-input" list="city-list" placeholder="Введите город..." value="Moscow">
+            
             <datalist id="city-list">
                 <option value="Moscow">Москва</option>
                 <option value="Saint Petersburg">Санкт-Петербург</option>
@@ -43,8 +33,10 @@
                 <option value="Paris">Париж</option>
             </datalist>
 
+            <!-- Единственный правильный блок погоды с иконкой -->
             <div class="weather-info">
                 <span class="temperature" id="weather-temp">--°C</span>
+                <span class="weather-icon" id="weather-icon"></span>
                 <span class="weather-desc" id="weather-desc">--</span>
             </div>
         </div>
@@ -52,7 +44,7 @@
         <!-- Блок 2: Валюты -->
         <div class="card currency-card">
             <h2>ВАЛЮТЫ
-                <select id="currency-select" class="header-select" onchange="fetchCurrency()">
+                <select id="currency-select" class="header-select" onchange="changeCurrency(this.value)">
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
                     <option value="CNY">CNY</option>
@@ -61,15 +53,12 @@
                 </select>
             </h2>
             <div class="currency-info">
-                <!-- Строка 1: Текущий курс -->
                 <div class="currency-row">
                     <span id="currency-name">USD / RUB</span>
                     <span class="rate" id="currency-rate">--.--</span>
                 </div>
-                <!-- Строка 2: Изменение за день -->
                 <div class="currency-row" style="border-bottom: none;">
                     <span>Изм. за день</span>
-                    <!-- Здесь будет стрелка, процент и абсолютная разница -->
                     <span id="currency-change" class="rate">--</span>
                 </div>
             </div>
@@ -86,40 +75,36 @@
         <!-- Блок 4: Криптовалюты -->
         <div class="card crypto-card">
             <h2>КРИПТА
-                <select id="crypto-select" class="header-select" onchange="updateCryptoDisplay()">
+                <select id="crypto-select" class="header-select" onchange="changeCrypto(this.value)">
                     <option value="bitcoin">BTC</option>
                     <option value="ethereum">ETH</option>
                     <option value="dogecoin">DOGE</option>
                     <option value="solana">SOL</option>
                 </select>
             </h2>
-            <!-- Строка с ценой в долларах -->
             <div class="currency-row">
                 <span id="crypto-name">BTC / USD</span>
                 <span class="rate" id="crypto-price">Загрузка...</span>
             </div>
-            <!-- НОВАЯ Строка с ценой в рублях -->
             <div class="currency-row" style="border-bottom: none;">
                 <span id="crypto-name-rub">BTC / RUB</span>
                 <span class="rate" id="crypto-price-rub" style="color: #666;">Загрузка...</span>
             </div>
         </div>
 
-        <!-- Блок 5: Статус системы -->
+        <!-- Блок 5: Статус системы (Единственный, без дублей) -->
         <div class="card system-monitor">
             <h2>СТАТУС СИСТЕМЫ</h2>
             <div class="sys-info">
-                <span>UPTIME: <span class="sys-val" id="sys-uptime">99.9%</span></span>
+                <span>UPTIME: <span class="sys-val" id="sys-uptime">00:00:00</span></span>
+                <span>MEM: <span class="sys-val" id="sys-mem">-- MB</span></span>
                 <span>PING: <span class="sys-val" id="sys-ping">-- ms</span></span>
                 <span>THREAT LEVEL: <span class="sys-val" id="sys-threat" style="color: #8b0000;">LOW</span></span>
             </div>
         </div>
 
-    </div> <!-- Вот здесь закрывается дашборд -->
-    </div> <!-- Закрылся дашборд -->
+    </div> 
 
-    <!-- ВОТ ЭТА СТРОКА ОЧЕНЬ ВАЖНА -->
     <script src="script.js"></script>
 </body>
-
 </html>
