@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Dashboard</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard">
+        <h1 class="main-title">DARK DASHBOARD</h1>
+
+        <!-- Блок 1: Погода -->
+        <div class="card weather-card">
+            <h2>ПОГОДА</h2>
+            <div class="weather-info">
+                <!-- Добавили id="weather-temp" -->
+                <span class="temperature" id="weather-temp">--°C</span>
+                <span class="city">Москва</span>
+            </div>
+        </div>
+
+        <!-- Блок 2: Валюты -->
+        <div class="card currency-card">
+            <h2>ВАЛЮТЫ</h2>
+            <div class="currency-info">
+                <div class="currency-row">
+                    <span>USD / RUB</span>
+                    <!-- Добавили id="usd-rate" -->
+                    <span class="rate" id="usd-rate">--.--</span>
+                </div>
+                <div class="currency-row">
+                    <span>EUR / RUB</span>
+                    <!-- Добавили id="eur-rate" -->
+                    <span class="rate" id="eur-rate">--.--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 3: Мировое время -->
+        <div class="card time-card">
+            <h2>МИРОВОЕ ВРЕМЯ</h2>
+            <div class="time-row"><span>Москва</span> <span id="time-msk">--:--:--</span></div>
+            <div class="time-row"><span>Лондон</span> <span id="time-lon">--:--:--</span></div>
+            <div class="time-row"><span>Токио</span> <span id="time-tok">--:--:--</span></div>
+        </div>
+
+        <!-- Блок 4: Криптовалюты -->
+        <div class="card crypto-card">
+            <h2>КРИПТОВАЛЮТЫ</h2>
+            <div class="currency-row">
+                <span>BTC / USD</span>
+                <span class="rate" id="crypto-btc">Загрузка...</span>
+            </div>
+            <div class="currency-row">
+                <span>ETH / USD</span>
+                <span class="rate" id="crypto-eth">Загрузка...</span>
+            </div>
+        </div>
+
+        <!-- Блок 5: Статус системы -->
+        <div class="card system-monitor">
+            <h2>СТАТУС СИСТЕМЫ</h2>
+            <div class="sys-info">
+                <span>UPTIME: <span class="sys-val" id="sys-uptime">99.9%</span></span>
+                <span>PING: <span class="sys-val" id="sys-ping">-- ms</span></span>
+                <span>THREAT LEVEL: <span class="sys-val" id="sys-threat" style="color: #8b0000;">LOW</span></span>
+            </div>
+        </div>
+
+    </div> <!-- Вот здесь закрывается дашборд -->
+    </div> <!-- Закрылся дашборд -->
+
+    <!-- ВОТ ЭТА СТРОКА ОЧЕНЬ ВАЖНА -->
+    <script src="script.js"></script>
+</body>
+</html>

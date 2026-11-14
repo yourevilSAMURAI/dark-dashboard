@@ -1,0 +1,159 @@
+/* 1. Базовые настройки */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #050505;
+    background-image: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+    color: #a3a3a3;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* 2. Главный контейнер */
+.dashboard {
+    background: #09090b;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 40px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+    max-width: 800px;
+    width: 100%;
+    display: grid; /* Включаем Grid для удобной сетки */
+    grid-template-columns: 1fr 1fr; /* Две колонки одинакового размера */
+    gap: 20px; /* Расстояние между карточками */
+}
+
+/* 3. Заголовок */
+.main-title {
+    font-family: 'Cinzel', serif;
+    color: #e0e0e0;
+    letter-spacing: 4px;
+    text-align: center;
+    grid-column: span 2; /* Заголовок занимает обе колонки */
+    margin-bottom: 20px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* 4. Карточки (Погода и Валюты) */
+.card {
+    background: #030303;
+    border: 1px solid #222;
+    padding: 20px;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+}
+
+.card:hover {
+    border-color: #8b0000; /* Кровавый акцент при наведении */
+}
+
+.card h2 {
+    font-family: 'Cinzel', serif;
+    color: #8b0000;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 10px;
+}
+
+/* 5. Стили для данных */
+.weather-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.temperature {
+    font-size: 36px;
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+.city {
+    color: #666;
+    font-size: 14px;
+}
+
+.currency-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #111;
+}
+
+.rate {
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+/* 6. Адаптивность для телефонов */
+@media (max-width: 600px) {
+    .dashboard {
+        grid-template-columns: 1fr; /* На телефоне всё в одну колонку */
+    }
+    .main-title {
+        grid-column: span 1;
+    }
+}
+/* --- Стили для новых блоков --- */
+
+/* Строки времени */
+.time-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #111;
+    font-size: 14px;
+}
+
+/* Блок статуса системы (растягиваем на 2 колонки) */
+.system-monitor {
+    grid-column: span 2; /* Вот эта магия растягивает блок на всю ширину */
+}
+
+.sys-info {
+    display: flex;
+    justify-content: space-between; /* Разносим три элемента по краям */
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    color: #666;
+}
+
+.sys-val {
+    color: #e0e0e0;
+    font-weight: 600;
+    font-family: 'Share Tech Mono', monospace; /* Можно добавить моноширинный шрифт для хакерского вида, если он есть, или оставить стандартный */
+}
+
+/* Адаптивность для телефона: блок статуса тоже в одну колонку */
+@media (max-width: 600px) {
+    .dashboard {
+        grid-template-columns: 1fr; /* На телефоне всё в одну колонку */
+    }
+    .main-title {
+        grid-column: span 1;
+    }
+    
+    /* 👇 УПРАВЛЯЕМ ПОРЯДКОМ БЛОКОВ НА ТЕЛЕФОНЕ */
+    .weather-card { order: 1; }
+    .time-card { order: 2; }
+    .currency-card { order: 3; }
+    .crypto-card { order: 4; }
+    .system-monitor { order: 5; grid-column: span 1; }
+    
+    .sys-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
