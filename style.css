@@ -121,10 +121,44 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-size: 12px;
     width: 100%;
-    margin-bottom: 15px;
     border-radius: 2px;
     outline: none;
     transition: border-color 0.3s ease;
+}
+
+/* Контейнер для поиска города */
+.city-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.city-input {
+    /* Убираем старый margin-bottom, так как отступ теперь у контейнера */
+    margin-bottom: 0;
+    flex: 1; /* Поле ввода занимает всё свободное место */
+}
+
+/* Кнопка "Найти" в стиле дашборда */
+.city-search-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #8b0000;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    padding: 0 15px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.city-search-btn:hover {
+    background: #8b0000;
+    color: #000;
+    border-color: #8b0000;
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.4);
 }
 
 .city-input:focus {

@@ -19,7 +19,11 @@
         <div class="card weather-card">
             <h2>ПОГОДА <span id="current-city-display" style="font-size: 10px; color: #555; margin-left: 10px;">MOSCOW</span></h2>
             
-            <input type="text" id="city-input" class="city-input" list="city-list" placeholder="Введите город..." value="Moscow">
+            <!-- Контейнер для поля ввода и кнопки -->
+            <div class="city-search">
+                <input type="text" id="city-input" class="city-input" list="city-list" placeholder="Введите город..." value="Moscow" enterkeyhint="search">
+                <button class="city-search-btn" onclick="searchCity()">Найти</button>
+            </div>
             
             <datalist id="city-list">
                 <option value="Moscow">Москва</option>

@@ -190,12 +190,19 @@ window.onload = function() {
     setInterval(fetchCurrency, 3600000);   // Валюты (раз в час)
 };
 
-// Слушатель для смены города
-document.getElementById('city-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        const city = this.value;
+// Функция поиска города (вызывается и по кнопке, и по Enter)
+function searchCity() {
+    const city = document.getElementById('city-input').value.trim();
+    if (city) {
         localStorage.setItem('dash_city', city);
         fetchWeather(city);
-        this.blur(); 
+        document.getElementById('city-input').blur(); 
+    }
+}
+
+// Слушатель Enter (для удобства на ПК)
+document.getElementById('city-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        searchCity();
     }
 });
